@@ -17,10 +17,7 @@ jobs:
         sudo apt-get update && sudo apt-get install -y clang llvm lld binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu binutils-arm-linux-gnueabi \
         gcc-arm-linux-gnueabi libncurses-dev flex bison openssl libssl-dev dkms libelf-dev libudev-dev libpci-dev libiberty-dev autoconf ccache
         sudo ln -sf /usr/bin/ccache /usr/local/bin/clang
-        ccache -M 4.5
-        TZ=Asia/Jakarta
-        sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-        sudo apt-get install -y install tzdata
+        ccache -M 50
         git clone --quiet -j64 --depth=1 https://github.com/greenforce-project/kernel_xiaomi_citrus_sm6115 -b main kernel
         cd kernel && wget https://github.com/timangpopi1/github_run/raw/main/build.sh
         export codename="juice" && export defconfig="vendor/juice-perf_defconfig"
