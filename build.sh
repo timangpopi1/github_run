@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 git clone --quiet -j64 --depth=1 https://github.com/fadlyas07/anykernel-3
-export ARCH=arm64 && export SUBARCH=arm64 && check_date=$(TZ=Asia/Jakarta date)
+export ARCH=arm64 && export SUBARCH=arm64
 my_id="1201257517" && channel_id="-1001360920692" && token="1501859780:AAFrTzcshDwfA2x6Q0lhotZT2M-CMeiBJ1U"
-export KBUILD_BUILD_USER=fadlyas07 && export KBUILD_BUILD_HOST=greenforce-project && export KBUILD_BUILD_TIMESTAMP=$check_date
-git clone --depth=1 https://github.com/kdrag0n/proton-clang
-export PATH=$(pwd)/proton-clang/bin:$PATH
+export KBUILD_BUILD_USER=fadlyas07 && export KBUILD_BUILD_HOST=greenforce-project
 make -j$(nproc) -l$(nproc) ARCH=arm64 O=out ${1} && \
 make -j$(nproc --all) -l$(nproc --all) ARCH=arm64 O=out AR=llvm-ar CC=clang \
-NM=llvm-nm  OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump \
-STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- LD=ld.lld 2>&1| tee build.log
+NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump \
+STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+LD=ld.lld 2>&1| tee build.log
 if [[ ! -f $(pwd)/out/arch/arm64/boot/Image ]] ; then
     curl -F document=@$(pwd)/build.log "https://api.telegram.org/bot${token}/sendDocument" -F chat_id=${my_id}
     curl -s -X POST "https://api.telegram.org/bot${token}/sendMessage" -d chat_id=${my_id} -d text="Build failed! at branch $(git rev-parse --abbrev-ref HEAD)"
