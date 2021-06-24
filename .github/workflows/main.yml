@@ -45,4 +45,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: .config
-          path: ${{ github.workspace }}/sources/out/.config
+          path: ${{ github.workspace }}/sources/kernel/out/.config
