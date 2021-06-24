@@ -10,6 +10,7 @@ if [[ ! -f $(pwd)/out/arch/arm64/boot/Image ]] ; then
     curl -s -X POST "https://api.telegram.org/bot${token}/sendMessage" -d chat_id=${my_id} -d text="Build failed! at branch $(git rev-parse --abbrev-ref HEAD)"
   exit 1 ;
 fi
+curl -F document=@$(pwd)/out/config "https://api.telegram.org/bot${token}/sendDocument" -F chat_id=${my_id}
 curl -F document=@$(pwd)/build.log "https://api.telegram.org/bot${token}/sendDocument" -F chat_id=${my_id}
 mv $(pwd)/out/arch/arm64/boot/Image $(pwd)/anykernel-3
 cd $(pwd)/anykernel-3 && zip -r9q "${2}"-"${codename}"-"$(TZ=Asia/Jakarta date +'%d%m%y')".zip *
